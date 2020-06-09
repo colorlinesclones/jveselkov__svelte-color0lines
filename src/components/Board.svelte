@@ -1,6 +1,6 @@
 <script>
   import Field from './Field.svelte'
-  import { onMount } from 'svelte'
+
   import { 
     createNewTable, 
     moveBallOnTable, 
