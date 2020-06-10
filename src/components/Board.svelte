@@ -8,7 +8,7 @@
     eraseTableCells,
     gameOver,
     addBall,
-    checkAvailableCell,
+    getPath,
     getPoints,
     getNewBalls
   } from '../helpers/table.js'
@@ -53,8 +53,11 @@
     }
     let moved = false 
     
-    if (checkAvailableCell(table, selected.rowIndex, selected.cellIndex, rowIndex, cellIndex)) {
-      table = moveBallOnTable(table, selected.rowIndex, selected.cellIndex, rowIndex, cellIndex)
+    const path = getPath(table, selected.rowIndex, selected.cellIndex, rowIndex, cellIndex)
+
+    if (path.length > 0) {    
+      await moveBall(path)  
+      
       moved = true
     }
     
@@ -75,6 +78,26 @@
     }
     
     dropSelected()
+  }
+
+  async function moveBall(path) {
+
+    return new Promise(resolve => {
+      for (let index = 1; index < path.length; index++) {
+        setTimeout(() => {
+          table = moveBallOnTable(
+            table, 
+            path[index-1].rowIndex, 
+            path[index-1].cellIndex, 
+            path[index].rowIndex, 
+            path[index].cellIndex
+          )
+          if (index === path.length - 1) {
+            resolve()
+          }
+        }, 100 * index)
+      }        
+    })
   }
 
   async function check(rowIndex, cellIndex) {
@@ -102,9 +125,7 @@
   <h2>Score: {score}</h2>
 
   {#each nextBalls as ball}
-    <Field
-      color={ball}
-    />
+    <Field color={ball}/>
   {/each}
 
   <button 

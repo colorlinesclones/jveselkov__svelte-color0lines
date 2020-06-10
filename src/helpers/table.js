@@ -150,16 +150,24 @@ function checkLines(table, rowIndex, cellIndex) {
 
 import { Graph, astar } from './astar'
 
-function checkAvailableCell(table, rowIndexFrom, cellIndexFrom, rowIndexTo, cellIndexTo) {
+function getPath(table, rowIndexFrom, cellIndexFrom, rowIndexTo, cellIndexTo) {
   const graph = new Graph(table.map(row => row.map(cell => !!cell ? 0 : 1)))
 
   const result = astar.search(
     graph, 
     graph.grid[rowIndexFrom][cellIndexFrom], 
     graph.grid[rowIndexTo][cellIndexTo]
-  )
+  ).map( item => {
+    return {
+      rowIndex: item.x,
+      cellIndex: item.y
+    }
+  })
 
-  return result.length > 0
+  return [{ 
+    rowIndex: rowIndexFrom,
+    cellIndex: cellIndexFrom
+  }, ...result]
 }
 
 function gameOver(table) {
@@ -178,7 +186,7 @@ export {
   checkLines,
   eraseTableCells,
   gameOver,
-  checkAvailableCell,
+  getPath,
   getPoints,
   getNewBalls,
   addBall
