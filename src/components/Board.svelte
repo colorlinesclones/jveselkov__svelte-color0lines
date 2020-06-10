@@ -82,7 +82,14 @@
   initGame()
 </script>
 
-<p>Score: {score}</p>
+<div class="top-panel">
+  <h2>Score: {score}</h2>
+
+  <button 
+    on:click={() => initGame()}
+  >restart</button>
+</div>
+
 <div class="board">
   {#each table as row, rowIndex}
     <div class="row">
@@ -100,12 +107,42 @@
 
 <style>
   .board {
-    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
   }
+  .top-panel {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
+  .top-panel h2,
+  .top-panel button {
+    display: inline-flex;
+    margin: 1em;
+  }
+  h2 {
+    color: var(--text-color);
+    text-shadow: 0.2em 0.2em 0.4em var(--dark-color), 
+                -0.2em -0.2em 0.4em var(--light-color);
+  }
+  button {
+    border: none;
+    color: var(--text-color);
+    text-shadow: 0.2em 0.2em 0.4em var(--dark-color), 
+                -0.2em -0.2em 0.4em var(--light-color);
+    border-radius: 3px;
+    background: linear-gradient(145deg, var(--button-light-color), var(--button-dark-color));
+    box-shadow:  0.2em 0.2em 0.4em var(--dark-color), 
+                -0.2em -0.2em 0.4em var(--light-color);
+  }
+
+  button:active{
+    background: linear-gradient(145deg, var(--button-dark-color), var(--button-light-color));
+  }
+
   .row {
     display: inline-flex; 
   }
