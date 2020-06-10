@@ -30,7 +30,7 @@ function eraseTableCells(table, cells) {
   return newTable
 }
 
-function addRandomBall(table) {
+function addBall(table, color) {
   let rowIndex, cellIndex
 
   do {
@@ -38,7 +38,21 @@ function addRandomBall(table) {
     cellIndex = getRandomInt(0, maxCells -1)
   } while (table[rowIndex][cellIndex] !== undefined)
   
-  return setTableCell(table, rowIndex, cellIndex, getRandomInt(1, countColors))
+  return setTableCell(table, rowIndex, cellIndex, color)
+}
+
+function addRandomBall(table) {
+  return addBall(table, getRandomInt(1, countColors))
+}
+
+function getNewBalls () {
+  const balls = []
+  
+  for (let index = 0; index < newBallsCount; index++) {
+    balls.push(getRandomInt(1, countColors))
+  }
+
+  return balls
 }
 
 function addRandomBalls(table, count) {
@@ -56,10 +70,6 @@ function createEmptyTable() {
 
 function createNewTable() {
   return addRandomBalls(createEmptyTable(), initialBallsCount)
-}
-
-function addNextBalls(table) {
-  return addRandomBalls(table, newBallsCount)
 }
 
 function moveBallOnTable(table, rowIndexFrom, cellIndexFrom, rowIndexTo, cellIndexTo) {
@@ -163,12 +173,13 @@ function getPoints(count) {
 }
 
 export {
-  addNextBalls,
   createNewTable,
   moveBallOnTable,
   checkLines,
   eraseTableCells,
   gameOver,
   checkAvailableCell,
-  getPoints
+  getPoints,
+  getNewBalls,
+  addBall
 }

@@ -25,6 +25,5 @@
   main {
     height: 100%;
     font-size: 1.2rem;
-    color: var(--text-color);
   }
 </style>

@@ -7,14 +7,16 @@
     checkLines, 
     eraseTableCells,
     gameOver,
-    addNextBalls,
+    addBall,
     checkAvailableCell,
-    getPoints
+    getPoints,
+    getNewBalls
   } from '../helpers/table.js'
 
   let selected
   let table
   let score
+  let nextBalls
 
   function dropSelected() {
     selected = {
@@ -27,6 +29,7 @@
     dropSelected()
     table = createNewTable()
     score = 0
+    nextBalls = [...getNewBalls()]
   }
   
   function cellClick(rowIndex, cellIndex) {
@@ -42,7 +45,7 @@
     } 
   }
 
-  function emptyCellClick(rowIndex, cellIndex) {
+  async function emptyCellClick(rowIndex, cellIndex) {
     if (selected.rowIndex == undefined 
       && selected.cellIndex == undefined) {
       
@@ -55,35 +58,54 @@
       moved = true
     }
     
-        
-    setTimeout(() => {
-      const lines = checkLines(table, rowIndex, cellIndex)
+    const isErase = await check(rowIndex, cellIndex)
 
-      if (lines.length !== 0) {
-        score += getPoints(lines.length)
+    if (gameOver(table)) {
+      console.log('game over') 
 
-        table = eraseTableCells(table, lines)
-      } else {
-        if (gameOver(table)) {
-          console.log('game over') 
+      return
+    }
 
-          return
-        }
-
-        if (moved) {
-          table = addNextBalls(table)
-        }
-      }
-
-      dropSelected()      
-    }, 500)    
+    if (moved && !isErase) {
+      nextBalls.forEach( ball => {
+        table = addBall(table, ball)
+      })
+      // await check()
+      nextBalls = getNewBalls()
+    }
+    
+    dropSelected()
   }
 
+  async function check(rowIndex, cellIndex) {
+    return new Promise(resolve => {
+      setTimeout( () => {
+        const lines = checkLines(table, rowIndex, cellIndex)
+
+        if (lines.length !== 0) {
+          score += getPoints(lines.length)
+
+          table = eraseTableCells(table, lines)
+          resolve(true)
+        }
+
+        resolve(false)
+      }, 500)
+    })
+  }  
+
   initGame()
+
 </script>
 
 <div class="top-panel">
   <h2>Score: {score}</h2>
+
+  {#each nextBalls as ball}
+    <Field
+      color={ball}
+    />
+  {/each}
 
   <button 
     on:click={() => initGame()}
