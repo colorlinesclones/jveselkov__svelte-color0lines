@@ -51,7 +51,7 @@
     background: var(--base-color);
     box-shadow:  0.2em 0.2em 0.4em var(--dark-color), 
                 -0.2em -0.2em 0.4em var(--light-color);
-  }
+  } 
 
   .ball{
     position: absolute;

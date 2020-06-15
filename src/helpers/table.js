@@ -29,14 +29,22 @@ function eraseTableCells(table, cells) {
 
   return newTable
 }
-
-function addBall(table, color) {
+function getRandomEmptyField(table){
   let rowIndex, cellIndex
 
   do {
     rowIndex = getRandomInt(0, maxRows -1)
     cellIndex = getRandomInt(0, maxCells -1)
   } while (table[rowIndex][cellIndex] !== undefined)
+  
+  return  {
+    rowIndex, 
+    cellIndex
+  }
+}
+
+function addBall(table, color) {
+  const { rowIndex, cellIndex } = getRandomEmptyField(table)
   
   return setTableCell(table, rowIndex, cellIndex, color)
 }
@@ -73,9 +81,8 @@ function createNewTable() {
 }
 
 function moveBallOnTable(table, rowIndexFrom, cellIndexFrom, rowIndexTo, cellIndexTo) {
-
   const color = table[rowIndexFrom][cellIndexFrom]
-  
+
   return setTableCell(
     setTableCell(table, rowIndexFrom, cellIndexFrom, undefined),
     rowIndexTo, cellIndexTo, color
@@ -189,5 +196,6 @@ export {
   getPath,
   getPoints,
   getNewBalls,
-  addBall
+  getRandomEmptyField,
+  setTableCell
 }

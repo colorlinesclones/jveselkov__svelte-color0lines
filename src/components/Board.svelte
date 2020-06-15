@@ -7,16 +7,18 @@
     checkLines, 
     eraseTableCells,
     gameOver,
-    addBall,
     getPath,
     getPoints,
-    getNewBalls
+    getNewBalls,
+    getRandomEmptyField,
+    setTableCell
   } from '../helpers/table.js'
 
   let selected
   let table
   let score
   let nextBalls
+  let loose
 
   function dropSelected() {
     selected = {
@@ -30,6 +32,7 @@
     table = createNewTable()
     score = 0
     nextBalls = [...getNewBalls()]
+    loose = false
   }
   
   function cellClick(rowIndex, cellIndex) {
@@ -51,6 +54,7 @@
       
       return
     }
+    
     let moved = false 
     
     const path = getPath(table, selected.rowIndex, selected.cellIndex, rowIndex, cellIndex)
@@ -64,16 +68,19 @@
     const isErase = await check(rowIndex, cellIndex)
 
     if (gameOver(table)) {
-      console.log('game over') 
+      loose = true 
 
       return
     }
 
     if (moved && !isErase) {
-      nextBalls.forEach( ball => {
-        table = addBall(table, ball)
+      nextBalls.forEach( async (ball) => {
+        const newField = getRandomEmptyField(table)
+        table = setTableCell(table, newField.rowIndex, newField.cellIndex, ball)
+        
+        await check(newField.rowIndex, newField.cellIndex)
+        
       })
-      // await check()
       nextBalls = getNewBalls()
     }
     
@@ -81,7 +88,6 @@
   }
 
   async function moveBall(path) {
-
     return new Promise(resolve => {
       for (let index = 1; index < path.length; index++) {
         setTimeout(() => {
@@ -121,7 +127,7 @@
 
 </script>
 
-<div class="top-panel">
+<div class="top">
   <h2>Score: {score}</h2>
 
   {#each nextBalls as ball}
@@ -148,45 +154,32 @@
   {/each}
 </div>
 
+<div class="bottom">
+  {#if loose}
+    <h2> Game over</h2> 
+  {/if}
+</div>
+
+
 <style>
+  .top,
+  .bottom,
   .board {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
   }
-  .top-panel {
-    display: flex;
+  .top {
     flex-direction: row;
-    justify-content: center;
-    align-items: center;
   }
-  .top-panel h2,
-  .top-panel button {
+  .top h2,
+  .top button {
     display: inline-flex;
     margin: 1em;
   }
-  h2 {
-    color: var(--text-color);
-    text-shadow: 0.2em 0.2em 0.4em var(--dark-color), 
-                -0.2em -0.2em 0.4em var(--light-color);
-  }
-  button {
-    border: none;
-    color: var(--text-color);
-    text-shadow: 0.2em 0.2em 0.4em var(--dark-color), 
-                -0.2em -0.2em 0.4em var(--light-color);
-    border-radius: 3px;
-    background: linear-gradient(145deg, var(--button-light-color), var(--button-dark-color));
-    box-shadow:  0.2em 0.2em 0.4em var(--dark-color), 
-                -0.2em -0.2em 0.4em var(--light-color);
-  }
-
-  button:active{
-    background: linear-gradient(145deg, var(--button-dark-color), var(--button-light-color));
-  }
-
-  .row {
+ 
+ .board .row {
     display: inline-flex; 
   }
 </style>
