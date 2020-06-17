@@ -1,23 +1,17 @@
 <script>
   import Field from './Field.svelte'
-
+  import {
+    score,
+    table,
+    next }from './../store'
   import { 
-    createNewTable, 
-    moveBallOnTable, 
-    checkLines, 
-    eraseTableCells,
-    gameOver,
-    getPath,
+    getRandomEmptyField, 
+    getPath, 
+    checkLines,
     getPoints,
-    getNewBalls,
-    getRandomEmptyField,
-    setTableCell
-  } from '../helpers/table.js'
-
+    gameOver } from './../helpers'
+  
   let selected
-  let table
-  let score
-  let nextBalls
   let loose
 
   function dropSelected() {
@@ -26,78 +20,59 @@
       cellIndex: null
     }
   }
-  
-  function initGame() {
-    dropSelected()
-    table = createNewTable()
-    score = 0
-    nextBalls = [...getNewBalls()]
-    loose = false
-  }
-  
-  function cellClick(rowIndex, cellIndex) {
-    if (selected.rowIndex === rowIndex && selected.cellIndex === cellIndex) {
-      dropSelected()
 
+  function  cellClick(rowIndex, cellIndex) {
+    if (selected.rowIndex === rowIndex && 
+        selected.cellIndex === cellIndex) {
+      dropSelected()
       return
+      
     }
 
     selected = {
       rowIndex,
       cellIndex
-    } 
+    }
   }
 
   async function emptyCellClick(rowIndex, cellIndex) {
-    if (selected.rowIndex == undefined 
-      && selected.cellIndex == undefined) {
-      
-      return
-    }
+    const path = getPath(
+      $table, 
+      selected.rowIndex, 
+      selected.cellIndex, 
+      rowIndex, 
+      cellIndex
+    )
     
-    let moved = false 
-    
-    const path = getPath(table, selected.rowIndex, selected.cellIndex, rowIndex, cellIndex)
+    let moved = false
 
     if (path.length > 0) {    
-      await moveBall(path)  
-      
+      await moveBall(path)
       moved = true
     }
-    
-    const isErase = await check(rowIndex, cellIndex)
 
-    if (gameOver(table)) {
+    const isErase = await check(rowIndex, cellIndex)
+    
+    if (gameOver($table)) {
       loose = true 
 
       return
     }
 
     if (moved && !isErase) {
-      nextBalls.forEach( async (ball) => {
-        const newField = getRandomEmptyField(table)
-        table = setTableCell(table, newField.rowIndex, newField.cellIndex, ball)
-        
-        await check(newField.rowIndex, newField.cellIndex)
-        
-      })
-      nextBalls = getNewBalls()
+      addNext()
     }
-    
     dropSelected()
   }
-
   async function moveBall(path) {
     return new Promise(resolve => {
       for (let index = 1; index < path.length; index++) {
         setTimeout(() => {
-          table = moveBallOnTable(
-            table, 
-            path[index-1].rowIndex, 
-            path[index-1].cellIndex, 
-            path[index].rowIndex, 
-            path[index].cellIndex
+          table.moveBall(
+            path[index-1], 
+            path[index]
           )
+
           if (index === path.length - 1) {
             resolve()
           }
@@ -109,12 +84,12 @@
   async function check(rowIndex, cellIndex) {
     return new Promise(resolve => {
       setTimeout( () => {
-        const lines = checkLines(table, rowIndex, cellIndex)
+        const line = checkLines($table, rowIndex, cellIndex)
 
-        if (lines.length !== 0) {
-          score += getPoints(lines.length)
+        if (line.length !== 0) {
+          score.add(getPoints(line.length))
 
-          table = eraseTableCells(table, lines)
+          table.eraseLine(line)
           resolve(true)
         }
 
@@ -123,43 +98,63 @@
     })
   }  
 
-  initGame()
+  function addNext() {
+    $next.forEach(async (element) => {
+      let newField = getRandomEmptyField($table)
+      table.setBall(newField.rowIndex, newField.cellIndex , element)
+      await check(newField.rowIndex, newField.cellIndex)
+    })
 
+    next.random()
+  }
+
+  function init() {
+    dropSelected()
+    table.reset()
+    next.reset()
+    score.reset()
+    loose = false
+
+    addNext()
+  }
+
+  init()
 </script>
 
-<div class="top">
-  <h2>Score: {score}</h2>
-
-  {#each nextBalls as ball}
-    <Field color={ball}/>
-  {/each}
-
-  <button 
-    on:click={() => initGame()}
-  >restart</button>
-</div>
-
 <div class="board">
-  {#each table as row, rowIndex}
+
+  <div class="top">
+    <h2>Score: { $score }</h2>
+
+    {#each $next as ball}
+      <Field color={ball}/>
+    {/each}
+
+    <button
+      on:click={() => init()}
+    >restart</button>
+  </div>
+
+  {#each $table as row, rowIndex}
     <div class="row">
       {#each row as cell, cellIndex}
         <Field 
-          color={cell}
           selected={selected.rowIndex === rowIndex && selected.cellIndex === cellIndex}
           on:cell-click={()=> cellClick(rowIndex, cellIndex)}
           on:empty-cell-click={()=> emptyCellClick(rowIndex, cellIndex)}
+          color={cell}
         />
       {/each}
     </div>
   {/each}
-</div>
 
-<div class="bottom">
-  {#if loose}
-    <h2> Game over</h2> 
-  {/if}
-</div>
+  <div class="bottom">
+    {#if loose}
+      <h2> Game over</h2> 
+    {/if}
+  </div>
 
+</div>
 
 <style>
   .top,
