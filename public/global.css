@@ -14,14 +14,14 @@
 	--ball-color-5: #BB342F;
 }
 
-@media screen and (prefers-color-scheme: dark) {
+@media screen and (prefers-color-scheme: no-preference) {
   :root {
     --base-color: #d8e3e9;
 		--light-color: #ffffff;
 		--dark-color: #959da1;
 		--button-light-color: #e7f3f9;
 		--button-dark-color: #c2ccd2;
-		--text-color: #2B303Ab9;
+		--text-color: yellow;
 		--alert-color: #D64933;
 
 		--ball-color-1: #C2F9BB;
