@@ -28,6 +28,12 @@ body {
 	background-color: var(--base-color);
 	color: var(--text-color);
 }
+@media (max-width: 30rem) {
+	body	{ 
+		font-size: 4vw ;
+	}
+}
+
 h2 {
 	text-shadow: 0.2em 0.2em 0.4em var(--dark-color), 
 							-0.2em -0.2em 0.4em var(--light-color);
