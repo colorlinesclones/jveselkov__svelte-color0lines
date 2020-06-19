@@ -36,6 +36,12 @@
   }
 
   async function emptyCellClick(rowIndex, cellIndex) {
+    if (selected.rowIndex == null ||
+        selected.cellIndex == null ) {
+
+        return false
+    }
+
     const path = getPath(
       $table, 
       selected.rowIndex, 
@@ -43,6 +49,8 @@
       rowIndex, 
       cellIndex
     )
+
+    dropSelected()
     
     let moved = false
 
@@ -62,7 +70,6 @@
     if (moved && !isErase) {
       addNext()
     }
-    dropSelected()
   }
   async function moveBall(path) {
     return new Promise(resolve => {

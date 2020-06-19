@@ -13,8 +13,8 @@
               : ''
 
   $: classes = color !== undefined 
-              ? `ball filled${selected ? ' bounce' : ''}` 
-              : 'ball'
+              ? `ball${selected ? ' bounce' : ''}` 
+              : ''
 
   function clickBall () {
     if (!color) {
@@ -59,10 +59,7 @@
     left: 15%;
     border-radius: 50%;
     height: 70%;
-    width: 70%;
-  }
-
-  .ball.filled{    
+    width: 70%;   
     box-shadow:  0.2em 0.2em 0.4em var(--dark-color), 
                 -0.2em -0.2em 0.4em var(--light-color);
   }
