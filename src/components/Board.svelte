@@ -9,7 +9,8 @@
     getRandomEmptyField, 
     getPath, 
     checkLines } from './../helpers'
-  
+  import { fade } from 'svelte/transition'
+
   let selected
   
   let loose = false 
@@ -126,12 +127,16 @@
 
 <div class="board">
   <div class="top">
-    <h2>Score: { $score }</h2>
-
-    {#each $next as ball}
-      <Field color={ball}/>
-    {/each}
-
+  <p>Score: { $score }</p>
+    {#if loose}
+      <p> Game over</p> 
+    {:else}
+      <div class="next"> 
+        {#each $next as ball}
+          <Field color={ball}/>
+        {/each}
+      </div>
+    {/if}
     <button
       on:click={() => init()}
     >restart</button>
@@ -150,17 +155,10 @@
     </div>
   {/each}
 
-  <div class="bottom">
-    {#if loose}
-      <h2> Game over</h2> 
-    {/if}
-  </div>
-
 </div>
 
 <style>
   .top,
-  .bottom,
   .board {
     display: flex;
     flex-direction: column;
@@ -170,8 +168,9 @@
   .top {
     flex-direction: row;
   }
-  .top h2,
-  .top button {
+  p,
+  button,
+  .next {
     display: inline-flex;
     margin: 1em;
   }

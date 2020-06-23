@@ -45,8 +45,8 @@
   .field {
     position: relative;
     margin: 0.2em;
-    height: 2em;
-    width: 2em;
+    height: var(--field-width);
+    width: var(--field-width);
     border-radius: 10%;
     background: var(--base-color);
     box-shadow:  0.2em 0.2em 0.4em var(--dark-color), 

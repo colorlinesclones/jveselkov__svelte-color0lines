@@ -12,6 +12,10 @@
 	--ball-color-3: #F9F8F8;
 	--ball-color-4: #DDA448;
 	--ball-color-5: #BB342F;
+
+	--field-width: 2em;
+	--shadow-width: calc(var(--field-width) / 10);
+	--shadow-width-x2: calc(var(--field-width) / 5);
 }
 
 @media screen and (prefers-color-scheme: no-preference) {
@@ -32,7 +36,6 @@
 		}
 }
 
-
 html, body {
 	position: relative;
 	width: 100%;
@@ -42,18 +45,17 @@ body {
 	margin: 0;
 	box-sizing: border-box;
 	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
-	font-size: 1.2rem;
+	font-size: 3.2vmin;
 	background-color: var(--base-color);
 	color: var(--text-color);
 	overflow: hidden;
 }
-@media screen and (max-width: 600px) {
-	body	{ 
-		font-size: 1em ;
+@media screen and (min-width: 980px) {
+	body {
+		font-size: 1.5em;
 	}
 }
-
-h2 {
+p {
 	text-shadow: 0.2em 0.2em 0.4em var(--dark-color), 
 							-0.2em -0.2em 0.4em var(--light-color);
 }
@@ -62,7 +64,8 @@ button {
 	padding: 0.4em 2em;
 	color: var(--text-color);
 	outline: none;
-	font-size: 1em;
+	font-size: 0.8em;
+	text-transform: uppercase;
 
 	text-shadow: 0.2em 0.2em 0.4em var(--dark-color), 
 							-0.2em -0.2em 0.4em var(--light-color);
@@ -75,4 +78,3 @@ button {
 button:active{
 	background: linear-gradient(145deg, var(--button-dark-color), var(--button-light-color));
 }
-
