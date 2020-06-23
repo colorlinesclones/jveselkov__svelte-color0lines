@@ -116,23 +116,9 @@ function getPath(table, rowIndexFrom, cellIndexFrom, rowIndexTo, cellIndexTo) {
     : []
 }
 
-function gameOver(table) {
-  const maxCells = table[0].length
-  const maxRows = table.length
-  const ballsCount = table.flat().filter(item => item !== 0).length
-
-  return  ballsCount + newBallsCount >= maxCells*maxRows 
-}
-
-function getPoints(count) {
-  return countBallToErase + (count - countBallToErase) * 2
-}
-
 export {
   checkLines,
-  gameOver,
   getPath,
-  getPoints,
   getRandomEmptyField,
   getRandomInt
 }

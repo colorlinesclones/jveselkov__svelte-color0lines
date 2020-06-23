@@ -3,16 +3,17 @@
   import {
     score,
     table,
-    next }from './../store'
+    next,
+    emptyBallsCount }from './../store'
   import { 
     getRandomEmptyField, 
     getPath, 
-    checkLines,
-    getPoints,
-    gameOver } from './../helpers'
+    checkLines } from './../helpers'
   
   let selected
-  let loose
+  
+  let loose = false 
+  $: loose = $emptyBallsCount - $next.length <= 0
 
   function dropSelected() {
     selected = {
@@ -36,10 +37,11 @@
   }
 
   async function emptyCellClick(rowIndex, cellIndex) {
-    if (selected.rowIndex == null ||
-        selected.cellIndex == null ) {
+    if (loose || 
+        (selected.rowIndex == null || 
+        selected.cellIndex == null )) {
 
-        return false
+        return 
     }
 
     const path = getPath(
@@ -60,12 +62,6 @@
     }
 
     const isErase = await check(rowIndex, cellIndex)
-    
-    if (gameOver($table)) {
-      loose = true 
-
-      return
-    }
 
     if (moved && !isErase) {
       addNext()
@@ -94,7 +90,7 @@
         const line = checkLines($table, rowIndex, cellIndex)
 
         if (line.length !== 0) {
-          score.add(getPoints(line.length))
+          score.add(line.length)
 
           table.eraseLine(line)
           resolve(true)
@@ -129,7 +125,6 @@
 </script>
 
 <div class="board">
-
   <div class="top">
     <h2>Score: { $score }</h2>
 

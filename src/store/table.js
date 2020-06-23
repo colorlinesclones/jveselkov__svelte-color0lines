@@ -1,4 +1,4 @@
-import { writable } from 'svelte/store'
+import { writable, derived } from 'svelte/store'
 import { maxCells, maxRows } from './../settings'
 
 function createTable(maxCells, maxRows) {
@@ -8,38 +8,42 @@ function createTable(maxCells, maxRows) {
   
   const { subscribe, set, update } = writable(emptyTable(maxRows, maxCells))
   
+  const setTableCell = (table, { rowIndex, cellIndex, value }) => {
+    const row = [...table[rowIndex]]
+    row[cellIndex] = value  
+    table[rowIndex] = row
+
+    return table
+  }
 	return {
     subscribe,
 		setBall: (rowIndex, cellIndex, value) => {
-      update(table => {
-        const row = [...table[rowIndex]]
-        row[cellIndex] = value  
-        table[rowIndex] = row
-
-        return table
-      })
+      update(table => setTableCell(table, {
+        rowIndex, cellIndex, value
+      }))
     },
     moveBall: (from, to) => {
       update(table => {
-        let row = [...table[from.rowIndex]]
-        let color = row[from.cellIndex]
-        row[from.cellIndex] = 0
-        table[from.rowIndex] = row
-        
-        row = [...table[to.rowIndex]]
-        row[to.cellIndex] = color
-        table[to.rowIndex] = row
-        return table
+        let value = table[from.rowIndex][from.cellIndex]
+
+        return setTableCell(setTableCell(table, {
+          ...to,
+          value
+        }),{
+          ...from,
+          value: 0
+        })
       })
     },
     eraseLine: line => {
       update(table => {
         line.forEach(item => {
-          const row = [...table[item.rowIndex]]
-          row[item.cellIndex] = 0
-          table[item.rowIndex] = row  
+          table = setTableCell(table, {
+            ...item,
+            value: 0
+          })
         })
-        
+
         return table
       })
     },
@@ -48,3 +52,8 @@ function createTable(maxCells, maxRows) {
 }
 
 export const table = createTable(maxCells, maxRows)
+
+export const emptyBallsCount = derived(
+  table,
+  $table => $table.flat().filter(item => item === 0).length
+)
