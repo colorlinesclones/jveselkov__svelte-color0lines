@@ -18,9 +18,9 @@
   function  cellClick(rowIndex, cellIndex) {
     if ($selected.rowIndex === rowIndex && 
         $selected.cellIndex === cellIndex) {
+
       selected.reset()
       return
-      
     }
 
     selected.set({
@@ -49,16 +49,9 @@
     
     let moved = false
 
-    if (path.length > 0) {    
-      await moveBall(path)
-      moved = true
-    }
-
-    const isErase = await check(rowIndex, cellIndex)
-
-    if (moved && !isErase) {
-      addNext()
-    }
+    moveBall(path)
+      .then(() => check(rowIndex, cellIndex))
+      .catch(() => addNext())
   }
   async function moveBall(path) {
     return new Promise(resolve => {
@@ -78,7 +71,7 @@
   }
 
   async function check(rowIndex, cellIndex) {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       setTimeout( () => {
         const line = checkLines($table, rowIndex, cellIndex)
 
@@ -86,19 +79,19 @@
           score.add(line.length)
 
           table.eraseLine(line)
-          resolve(true)
+          resolve()
         }
 
-        resolve(false)
+        reject()
       }, 500)
     })
   }  
 
   function addNext() {
-    $next.forEach(async (element) => {
+    $next.forEach( async (element) => {
       let newField = getRandomEmptyField($table)
       table.setBall(newField.rowIndex, newField.cellIndex , element)
-      await check(newField.rowIndex, newField.cellIndex)
+      await check(newField.rowIndex, newField.cellIndex).catch(() =>{})
     })
 
     next.random()
