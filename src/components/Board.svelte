@@ -4,56 +4,48 @@
     score,
     table,
     next,
+    selected,
     emptyBallsCount }from './../store'
   import { 
     getRandomEmptyField, 
     getPath, 
     checkLines } from './../helpers'
   import { fade } from 'svelte/transition'
-
-  let selected
   
   let loose = false 
   $: loose = $emptyBallsCount - $next.length <= 0
 
-  function dropSelected() {
-    selected = {
-      rowIndex: null,
-      cellIndex: null
-    }
-  }
-
   function  cellClick(rowIndex, cellIndex) {
-    if (selected.rowIndex === rowIndex && 
-        selected.cellIndex === cellIndex) {
-      dropSelected()
+    if ($selected.rowIndex === rowIndex && 
+        $selected.cellIndex === cellIndex) {
+      selected.reset()
       return
       
     }
 
-    selected = {
+    selected.set({
       rowIndex,
       cellIndex
-    }
+    })
   }
 
   async function emptyCellClick(rowIndex, cellIndex) {
     if (loose || 
-        (selected.rowIndex == null || 
-        selected.cellIndex == null )) {
+        ($selected.rowIndex == null || 
+        $selected.cellIndex == null )) {
 
         return 
     }
 
     const path = getPath(
       $table, 
-      selected.rowIndex, 
-      selected.cellIndex, 
+      $selected.rowIndex, 
+      $selected.cellIndex, 
       rowIndex, 
       cellIndex
     )
 
-    dropSelected()
+    selected.reset()
     
     let moved = false
 
@@ -113,7 +105,7 @@
   }
 
   function init() {
-    dropSelected()
+    selected.reset()
     table.reset()
     next.reset()
     score.reset()
@@ -146,7 +138,7 @@
     <div class="row">
       {#each row as cell, cellIndex}
         <Field 
-          selected={selected.rowIndex === rowIndex && selected.cellIndex === cellIndex}
+          selected={$selected.rowIndex === rowIndex && $selected.cellIndex === cellIndex}
           on:cell-click={()=> cellClick(rowIndex, cellIndex)}
           on:empty-cell-click={()=> emptyCellClick(rowIndex, cellIndex)}
           color={cell}
