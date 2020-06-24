@@ -1,10 +1,10 @@
 <script>
   import { createEventDispatcher } from 'svelte'
   import Ball from './Ball.svelte'
-
+  
   export let color = 0
-
-	const dispatch = createEventDispatcher()
+  
+  const dispatch = createEventDispatcher()
 
   function clickBall () {
     dispatch(color === 0 ? 'empty-cell-click': 'cell-click')
