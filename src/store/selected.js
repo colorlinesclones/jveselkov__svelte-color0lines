@@ -1,17 +1,17 @@
 import { writable } from 'svelte/store'
 
-function createSelected(c) {   
+function createSelected(c) {
   const initial = {
     rowIndex: null,
-    cellIndex: null
+    cellIndex: null,
   }
   const { subscribe, set, update } = writable(initial)
-  
-	return {
+
+  return {
     subscribe,
-    set: value => update( () => value), 
-    reset: () => set(initial)
-	}
+    set: (value) => update(() => value),
+    reset: () => set(initial),
+  }
 }
 
 export const selected = createSelected()

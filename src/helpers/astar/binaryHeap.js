@@ -1,5 +1,5 @@
-export function getHeap (){ 
-  return new BinaryHeap(node => node.f)
+export function getHeap() {
+  return new BinaryHeap((node) => node.f)
 }
 
 function BinaryHeap(scoreFunction) {
@@ -12,11 +12,11 @@ BinaryHeap.prototype = {
     this.content.push(element)
     this.sinkDown(this.content.length - 1)
   },
-  
+
   pop() {
     let result = this.content[0]
     let end = this.content.pop()
-    
+
     if (this.content.length > 0) {
       this.content[0] = end
       this.bubbleUp(0)
@@ -24,7 +24,7 @@ BinaryHeap.prototype = {
 
     return result
   },
-  
+
   remove(node) {
     let i = this.content.indexOf(node)
     let end = this.content.pop()
@@ -39,15 +39,15 @@ BinaryHeap.prototype = {
       }
     }
   },
-  
+
   size() {
     return this.content.length
   },
-  
+
   rescoreElement(node) {
     this.sinkDown(this.content.indexOf(node))
   },
-  
+
   sinkDown(n) {
     let element = this.content[n]
 
@@ -58,10 +58,9 @@ BinaryHeap.prototype = {
       if (this.scoreFunction(element) < this.scoreFunction(parent)) {
         this.content[parentN] = element
         this.content[n] = parent
-        
+
         n = parentN
-      }
-      else {
+      } else {
         break
       }
     }
@@ -83,16 +82,16 @@ BinaryHeap.prototype = {
         child1Score = this.scoreFunction(child1)
 
         if (child1Score < elemScore) {
-            swap = child1N
+          swap = child1N
         }
       }
 
       if (child2N < length) {
         let child2 = this.content[child2N]
         let child2Score = this.scoreFunction(child2)
-        
+
         if (child2Score < (swap === null ? elemScore : child1Score)) {
-            swap = child2N
+          swap = child2N
         }
       }
 
@@ -104,5 +103,5 @@ BinaryHeap.prototype = {
         break
       }
     }
-  }
+  },
 }

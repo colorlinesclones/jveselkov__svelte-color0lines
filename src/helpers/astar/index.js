@@ -1,5 +1,5 @@
 import { getHeap } from './binaryHeap'
-import { GridNode} from './gridNode'
+import { GridNode } from './gridNode'
 
 function Graph(gridIn, options) {
   options = options || {}
@@ -12,7 +12,7 @@ function Graph(gridIn, options) {
 
     for (let y = 0, row = gridIn[x]; y < row.length; y++) {
       let node = new GridNode(x, y, row[y])
-      
+
       this.grid[x][y] = node
       this.nodes.push(node)
     }
@@ -21,7 +21,7 @@ function Graph(gridIn, options) {
   this.init()
 }
 
-Graph.prototype.init = function() {
+Graph.prototype.init = function () {
   this.dirtyNodes = []
 
   for (let i = 0; i < this.nodes.length; i++) {
@@ -29,7 +29,7 @@ Graph.prototype.init = function() {
   }
 }
 
-Graph.prototype.cleanDirty = function() {
+Graph.prototype.cleanDirty = function () {
   for (let i = 0; i < this.dirtyNodes.length; i++) {
     astar.cleanNode(this.dirtyNodes[i])
   }
@@ -37,11 +37,11 @@ Graph.prototype.cleanDirty = function() {
   this.dirtyNodes = []
 }
 
-Graph.prototype.markDirty = function(node) {
+Graph.prototype.markDirty = function (node) {
   this.dirtyNodes.push(node)
 }
 
-Graph.prototype.neighbors = function(node) {
+Graph.prototype.neighbors = function (node) {
   const ret = []
   const x = node.x
   const y = node.y
@@ -70,46 +70,46 @@ Graph.prototype.neighbors = function(node) {
   if (!this.diagonal) {
     return ret
   }
-  
+
   // Southwest
   if (grid[x - 1] && grid[x - 1][y - 1]) {
-      ret.push(grid[x - 1][y - 1])
+    ret.push(grid[x - 1][y - 1])
   }
 
   // Southeast
   if (grid[x + 1] && grid[x + 1][y - 1]) {
-      ret.push(grid[x + 1][y - 1])
+    ret.push(grid[x + 1][y - 1])
   }
 
   // Northwest
   if (grid[x - 1] && grid[x - 1][y + 1]) {
-      ret.push(grid[x - 1][y + 1])
+    ret.push(grid[x - 1][y + 1])
   }
 
   // Northeast
   if (grid[x + 1] && grid[x + 1][y + 1]) {
-      ret.push(grid[x + 1][y + 1])
+    ret.push(grid[x + 1][y + 1])
   }
 
   return ret
 }
 
-Graph.prototype.toString = function() {
+Graph.prototype.toString = function () {
   const graphString = []
   const nodes = this.grid
 
   for (let x = 0; x < nodes.length; x++) {
     const rowDebug = []
     const row = nodes[x]
-    
+
     for (let y = 0; y < row.length; y++) {
       rowDebug.push(row[y].weight)
     }
 
-    graphString.push(rowDebug.join(" "))
+    graphString.push(rowDebug.join(' '))
   }
 
-  return graphString.join("\n")
+  return graphString.join('\n')
 }
 function pathTo(node) {
   let curr = node
@@ -119,7 +119,7 @@ function pathTo(node) {
     path.unshift(curr)
     curr = curr.parent
   }
-  
+
   return path
 }
 
@@ -127,7 +127,7 @@ const astar = {
   search(graph, start, end, options) {
     graph.cleanDirty()
     options = options || {}
-    
+
     let heuristic = options.heuristic || astar.heuristics.manhattan
     let closest = options.closest || false
 
@@ -169,7 +169,11 @@ const astar = {
           graph.markDirty(neighbor)
 
           if (closest) {
-            if (neighbor.h < closestNode.h || (neighbor.h === closestNode.h && neighbor.g < closestNode.g)) {
+            if (
+              neighbor.h < closestNode.h ||
+              (neighbor.h === closestNode.h &&
+                neighbor.g < closestNode.g)
+            ) {
               closestNode = neighbor
             }
           }
@@ -204,8 +208,8 @@ const astar = {
       let d1 = Math.abs(pos1.x - pos0.x)
       let d2 = Math.abs(pos1.y - pos0.y)
 
-      return (D * (d1 + d2)) + ((D2 - (2 * D)) * Math.min(d1, d2))
-    }
+      return D * (d1 + d2) + (D2 - 2 * D) * Math.min(d1, d2)
+    },
   },
 
   cleanNode(node) {
@@ -215,10 +219,7 @@ const astar = {
     node.visited = false
     node.closed = false
     node.parent = null
-  }
+  },
 }
 
-export  {
-  astar,
-  Graph
-}
+export { astar, Graph }
