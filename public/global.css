@@ -1,80 +1,90 @@
-:root{
-	--base-color: #d8e3e9;
-	--light-color: #ffffff;
-	--dark-color: #959da1;
-	--button-light-color: #e7f3f9;
-	--button-dark-color: #c2ccd2;
-	--text-color: #2B303Ab9;
-	--alert-color: #D64933;
+:root {
+  --base-color: #d8e3e9;
+  --light-color: #ffffff;
+  --dark-color: #959da1;
+  --button-light-color: #e7f3f9;
+  --button-dark-color: #c2ccd2;
+  --text-color: #2b303ab9;
+  --alert-color: #d64933;
 
-	--ball-color-1: #C2F9BB;
-	--ball-color-2: #8D6A9F;
-	--ball-color-3: #F9F8F8;
-	--ball-color-4: #DDA448;
-	--ball-color-5: #BB342F;
+  --ball-color-1: #c2f9bb;
+  --ball-color-2: #8d6a9f;
+  --ball-color-3: #f9f8f8;
+  --ball-color-4: #dda448;
+  --ball-color-5: #bb342f;
 
-	--field-width: 2em;
-	--shadow-width: calc(var(--field-width) / 10);
-	--shadow-width-x2: calc(var(--field-width) / 5);
+  --field-width: 2em;
+  --shadow-width: calc(var(--field-width) / 10);
+  --shadow-width-x2: calc(var(--field-width) / 5);
 }
 
 @media screen and (prefers-color-scheme: no-preference) {
   :root {
     --base-color: #d8e3e9;
-		--light-color: #ffffff;
-		--dark-color: #959da1;
-		--button-light-color: #e7f3f9;
-		--button-dark-color: #c2ccd2;
-		--text-color: yellow;
-		--alert-color: #D64933;
+    --light-color: #ffffff;
+    --dark-color: #959da1;
+    --button-light-color: #e7f3f9;
+    --button-dark-color: #c2ccd2;
+    --text-color: yellow;
+    --alert-color: #d64933;
 
-		--ball-color-1: #C2F9BB;
-		--ball-color-2: #8D6A9F;
-		--ball-color-3: #F9F8F8;
-		--ball-color-4: #DDA448;
-		--ball-color-5: #BB342F;
-		}
+    --ball-color-1: #c2f9bb;
+    --ball-color-2: #8d6a9f;
+    --ball-color-3: #f9f8f8;
+    --ball-color-4: #dda448;
+    --ball-color-5: #bb342f;
+  }
 }
 
-html, body {
-	position: relative;
-	width: 100%;
+html,
+body {
+  position: relative;
+  width: 100%;
 }
 
 body {
-	margin: 0;
-	box-sizing: border-box;
-	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
-	font-size: 3.2vmin;
-	background-color: var(--base-color);
-	color: var(--text-color);
-	overflow: hidden;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+  font-size: 3.2vmin;
+  background-color: var(--base-color);
+  color: var(--text-color);
+  overflow: hidden;
 }
 @media screen and (min-width: 980px) {
-	body {
-		font-size: 1.5em;
-	}
+  body {
+    font-size: 1.5em;
+  }
 }
 p {
-	text-shadow: 0.2em 0.2em 0.4em var(--dark-color), 
-							-0.2em -0.2em 0.4em var(--light-color);
+  text-shadow: 0.2em 0.2em 0.4em var(--dark-color),
+    -0.2em -0.2em 0.4em var(--light-color);
 }
 button {
-	border: none;
-	padding: 0.4em 2em;
-	color: var(--text-color);
-	outline: none;
-	font-size: 0.8em;
-	text-transform: uppercase;
+  border: none;
+  padding: 0.4em 2em;
+  color: var(--text-color);
+  outline: none;
+  font-size: 0.8em;
+  text-transform: uppercase;
 
-	text-shadow: 0.2em 0.2em 0.4em var(--dark-color), 
-							-0.2em -0.2em 0.4em var(--light-color);
-	border-radius: 1em;
-	background: linear-gradient(145deg, var(--button-light-color), var(--button-dark-color));
-	box-shadow:  0.2em 0.2em 0.4em var(--dark-color), 
-							-0.2em -0.2em 0.4em var(--light-color);
+  text-shadow: 0.2em 0.2em 0.4em var(--dark-color),
+    -0.2em -0.2em 0.4em var(--light-color);
+  border-radius: 1em;
+  background: linear-gradient(
+    145deg,
+    var(--button-light-color),
+    var(--button-dark-color)
+  );
+  box-shadow: 0.2em 0.2em 0.4em var(--dark-color),
+    -0.2em -0.2em 0.4em var(--light-color);
 }
 
-button:active{
-	background: linear-gradient(145deg, var(--button-dark-color), var(--button-light-color));
+button:active {
+  background: linear-gradient(
+    145deg,
+    var(--button-dark-color),
+    var(--button-light-color)
+  );
 }

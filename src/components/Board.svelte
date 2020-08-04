@@ -1,14 +1,27 @@
 <script>
   import Field from './Field.svelte'
-  import { score, table, next, selected, emptyBallsCount } from './../store'
-  import { getRandomEmptyField, getPath, checkLines } from './../helpers'
+  import {
+    score,
+    table,
+    next,
+    selected,
+    emptyBallsCount,
+  } from './../store'
+  import {
+    getRandomEmptyField,
+    getPath,
+    checkLines,
+  } from './../helpers'
   import { fade } from 'svelte/transition'
 
   let loose = false
   $: loose = $emptyBallsCount - $next.length <= 0
 
   function cellClick(rowIndex, cellIndex) {
-    if ($selected.rowIndex === rowIndex && $selected.cellIndex === cellIndex) {
+    if (
+      $selected.rowIndex === rowIndex &&
+      $selected.cellIndex === cellIndex
+    ) {
       selected.reset()
       return
     }
@@ -20,7 +33,10 @@
   }
 
   async function emptyCellClick(rowIndex, cellIndex) {
-    if (loose || ($selected.rowIndex == null || $selected.cellIndex == null)) {
+    if (
+      loose ||
+      ($selected.rowIndex == null || $selected.cellIndex == null)
+    ) {
       return
     }
 
@@ -29,12 +45,10 @@
       $selected.rowIndex,
       $selected.cellIndex,
       rowIndex,
-      cellIndex
+      cellIndex,
     )
 
     selected.reset()
-
-    let moved = false
 
     moveBall(path)
       .then(() => check(rowIndex, cellIndex))
@@ -75,7 +89,9 @@
     $next.forEach(async element => {
       let newField = getRandomEmptyField($table)
       table.setBall(newField.rowIndex, newField.cellIndex, element)
-      await check(newField.rowIndex, newField.cellIndex).catch(() => {})
+      await check(newField.rowIndex, newField.cellIndex).catch(
+        () => {},
+      )
     })
 
     next.random()
