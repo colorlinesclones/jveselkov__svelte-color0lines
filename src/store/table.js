@@ -29,7 +29,7 @@ function createTable(maxCells, maxRows) {
     },
     moveBall: (from, to) => {
       update((table) => {
-        let value = table[from.rowIndex][from.cellIndex]
+        const value = table[from.rowIndex][from.cellIndex]
 
         return setTableCell(
           setTableCell(table, {
