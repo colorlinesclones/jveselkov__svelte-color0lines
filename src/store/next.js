@@ -6,10 +6,11 @@ import {
   initialBallsCount,
 } from './../settings'
 
-const randomArr = (countColors, newBallsCount) =>
-  new Array(newBallsCount)
+function randomArr(countColors, newBallsCount) {
+  return new Array(newBallsCount)
     .fill(0)
     .map(() => getRandomInt(1, countColors))
+}
 
 function createNextBalls(
   countColors,

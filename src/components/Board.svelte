@@ -1,5 +1,6 @@
 <script>
   import Field from './Field.svelte'
+
   import {
     score,
     table,
@@ -12,50 +13,55 @@
     getPath,
     checkLines,
   } from './../helpers'
-  import { fade } from 'svelte/transition'
 
   let loose = false
   $: loose = $emptyBallsCount - $next.length <= 0
 
   function cellClick(rowIndex, cellIndex) {
-    if (
-      $selected.rowIndex === rowIndex &&
-      $selected.cellIndex === cellIndex
-    ) {
+    return function () {
+      if (
+        $selected.rowIndex === rowIndex &&
+        $selected.cellIndex === cellIndex
+      ) {
+        selected.reset()
+        return
+      }
+
+      selected.set({
+        rowIndex,
+        cellIndex,
+      })
+    }
+  }
+
+  function emptyCellClick(rowIndex, cellIndex) {
+    return async function () {
+      if (
+        loose ||
+        $selected.rowIndex == null ||
+        $selected.cellIndex == null
+      ) {
+        return
+      }
+
+      const path = getPath(
+        $table,
+        $selected.rowIndex,
+        $selected.cellIndex,
+        rowIndex,
+        cellIndex,
+      )
+
       selected.reset()
-      return
-    }
 
-    selected.set({
-      rowIndex,
-      cellIndex,
-    })
+      moveBall(path)
+        .then(() => check(rowIndex, cellIndex))
+        .catch(() => addNext())
+    }
   }
 
-  async function emptyCellClick(rowIndex, cellIndex) {
-    if (
-      loose ||
-      ($selected.rowIndex == null || $selected.cellIndex == null)
-    ) {
-      return
-    }
-
-    const path = getPath(
-      $table,
-      $selected.rowIndex,
-      $selected.cellIndex,
-      rowIndex,
-      cellIndex,
-    )
-
-    selected.reset()
-
-    moveBall(path)
-      .then(() => check(rowIndex, cellIndex))
-      .catch(() => addNext())
-  }
   async function moveBall(path) {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       for (let index = 1; index < path.length; index++) {
         setTimeout(() => {
           table.moveBall(path[index - 1], path[index])
@@ -86,12 +92,13 @@
   }
 
   function addNext() {
-    $next.forEach(async element => {
+    $next.forEach(async (element) => {
       let newField = getRandomEmptyField($table)
       table.setBall(newField.rowIndex, newField.cellIndex, element)
-      await check(newField.rowIndex, newField.cellIndex).catch(
-        () => {},
-      )
+      await check(
+        newField.rowIndex,
+        newField.cellIndex,
+      ).catch(() => {})
     })
 
     next.random()
@@ -153,8 +160,8 @@
       {#each row as cell, cellIndex}
         <Field
           selected={$selected.rowIndex === rowIndex && $selected.cellIndex === cellIndex}
-          on:cell-click={() => cellClick(rowIndex, cellIndex)}
-          on:empty-cell-click={() => emptyCellClick(rowIndex, cellIndex)}
+          on:cell-click={cellClick(rowIndex, cellIndex)}
+          on:empty-cell-click={emptyCellClick(rowIndex, cellIndex)}
           color={cell} />
       {/each}
     </div>

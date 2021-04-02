@@ -3,6 +3,5 @@
   "semi": false,
   "singleQuote": true,
   "trailingComma": "all",
-  "printWidth": 70,
-  "plugins": ["prettier-plugin-svelte"]
+  "printWidth": 70
 }

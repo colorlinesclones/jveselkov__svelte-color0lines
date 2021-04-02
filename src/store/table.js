@@ -1,6 +1,14 @@
 import { writable, derived } from 'svelte/store'
 import { maxCells, maxRows } from './../settings'
 
+function setTableCell(table, { rowIndex, cellIndex, value }) {
+  const row = [...table[rowIndex]]
+  row[cellIndex] = value
+  table[rowIndex] = row
+
+  return table
+}
+
 function createTable(maxCells, maxRows) {
   const emptyTable = (maxRows, maxCells) =>
     new Array(maxRows).fill(new Array(maxCells).fill(0))
@@ -9,13 +17,6 @@ function createTable(maxCells, maxRows) {
     emptyTable(maxRows, maxCells),
   )
 
-  const setTableCell = (table, { rowIndex, cellIndex, value }) => {
-    const row = [...table[rowIndex]]
-    row[cellIndex] = value
-    table[rowIndex] = row
-
-    return table
-  }
   return {
     subscribe,
     setBall: (rowIndex, cellIndex, value) => {
