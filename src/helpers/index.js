@@ -125,3 +125,13 @@ function getPath(
 }
 
 export { checkLines, getPath, getRandomEmptyField, getRandomInt }
+
+export function debounce(func, timeout = 300) {
+  let timer
+  return (...args) => {
+    clearTimeout(timer)
+    timer = window.setTimeout(() => {
+      func(...args)
+    }, timeout)
+  }
+}

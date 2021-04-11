@@ -12,6 +12,7 @@
     getRandomEmptyField,
     getPath,
     checkLines,
+    debounce,
   } from './../helpers'
 
   let loose = false
@@ -105,10 +106,11 @@
   }
 
   function init() {
+    score.reset()
     selected.reset()
     table.reset()
     next.reset()
-    score.reset()
+
     loose = false
 
     addNext()
@@ -152,7 +154,7 @@
         {/each}
       </div>
     {/if}
-    <button on:click={() => init()}>restart</button>
+    <button on:click={debounce(init)}>restart</button>
   </div>
 
   {#each $table as row, rowIndex}
