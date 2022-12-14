@@ -1,7 +1,8 @@
 import { writable, derived } from 'svelte/store'
-import { maxCells, maxRows } from './../settings'
+import { maxCells, maxRows } from '../settings'
 
 function setTableCell(table, { rowIndex, cellIndex, value }) {
+  console.log(table)
   const row = [...table[rowIndex]]
   row[cellIndex] = value
   table[rowIndex] = row

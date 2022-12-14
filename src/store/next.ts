@@ -4,7 +4,7 @@ import {
   countColors,
   newBallsCount,
   initialBallsCount,
-} from './../settings'
+} from '../settings'
 
 function randomArr(countColors, newBallsCount) {
   return new Array(newBallsCount)
