@@ -1,62 +1,43 @@
 import { writable, derived } from 'svelte/store'
+import type { Writable, Readable } from 'svelte/store'
 import { MAX_CELLS, MAX_ROWS } from '@/settings'
+import { setTableCell, getEmptyTable } from '@/helpers'
 
-function setTableCell(table, { rowIndex, cellIndex, value }) {
-  const row = [...table[rowIndex]]
-  row[cellIndex] = value
-  table[rowIndex] = row
-
-  return table
+type TTableStore = {
+  subscribe: Writable<TTable>['subscribe']
+  setBall: (ield: TField, value: number) => void
+  moveBall: (from: TField, to: TField) => void
+  eraseLine: (line: TPath) => void
+  reset: () => void
 }
 
-function createTable(MAX_CELLS, MAX_ROWS) {
-  const emptyTable = (MAX_ROWS, MAX_CELLS) =>
-    new Array(MAX_ROWS).fill(new Array(MAX_CELLS).fill(0))
-
-  const { subscribe, set, update } = writable(
-    emptyTable(MAX_ROWS, MAX_CELLS),
+function createTable(maxCells: number, maxRows: number): TTableStore {
+  const { subscribe, set, update } = writable<TTable>(
+    getEmptyTable(maxCells, maxRows),
   )
 
   return {
     subscribe,
-    setBall: (rowIndex, cellIndex, value) => {
-      update((table) =>
-        setTableCell(table, {
-          rowIndex,
-          cellIndex,
-          value,
-        }),
-      )
+    setBall: (field, value) => {
+      update((table) => setTableCell(table, field, value))
     },
     moveBall: (from, to) => {
       update((table) => {
         const value = table[from.rowIndex][from.cellIndex]
 
-        return setTableCell(
-          setTableCell(table, {
-            ...to,
-            value,
-          }),
-          {
-            ...from,
-            value: 0,
-          },
-        )
+        return setTableCell(setTableCell(table, to, value), from, 0)
       })
     },
     eraseLine: (line) => {
       update((table) => {
         line.forEach((item) => {
-          table = setTableCell(table, {
-            ...item,
-            value: 0,
-          })
+          table = setTableCell(table, item, 0)
         })
 
         return table
       })
     },
-    reset: () => set(emptyTable(MAX_ROWS, MAX_CELLS)),
+    reset: () => set(getEmptyTable(maxCells, maxRows)),
   }
 }
 

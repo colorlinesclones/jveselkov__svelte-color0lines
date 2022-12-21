@@ -1,30 +1,32 @@
 import { writable } from 'svelte/store'
-import { getRandomInt } from '@/helpers'
+import type { Writable } from 'svelte/store'
+
+import { getRandomColors } from '@/helpers'
 import {
   COUNT_COLORS,
   NEW_BALLS_COUNT,
   INITIAL_BALLS_COUNT,
 } from '@/settings'
 
-function randomArr(COUNT_COLORS, NEW_BALLS_COUNT) {
-  return new Array(NEW_BALLS_COUNT)
-    .fill(0)
-    .map(() => getRandomInt(1, COUNT_COLORS))
+type TNextBallsStore = {
+  subscribe: Writable<number[]>['subscribe']
+  random: () => void
+  reset: () => void
 }
 
 function createNextBalls(
-  COUNT_COLORS,
-  NEW_BALLS_COUNT,
-  INITIAL_BALLS_COUNT,
-) {
+  countColors: number,
+  newBallsCount: number,
+  initialBallsCount: number,
+): TNextBallsStore {
   const { subscribe, set } = writable(
-    randomArr(COUNT_COLORS, INITIAL_BALLS_COUNT),
+    getRandomColors(countColors, initialBallsCount),
   )
 
   return {
     subscribe,
-    random: () => set(randomArr(COUNT_COLORS, NEW_BALLS_COUNT)),
-    reset: () => set(randomArr(COUNT_COLORS, INITIAL_BALLS_COUNT)),
+    random: () => set(getRandomColors(countColors, newBallsCount)),
+    reset: () => set(getRandomColors(countColors, initialBallsCount)),
   }
 }
 

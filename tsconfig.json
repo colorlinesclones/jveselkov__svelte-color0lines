@@ -3,6 +3,7 @@
   "compilerOptions": {
     "target": "ESNext",
     "useDefineForClassFields": true,
+    "strict": true,
     "module": "ESNext",
     "resolveJsonModule": true,
     /**
@@ -14,6 +15,7 @@
     "allowJs": true,
     "checkJs": true,
     "isolatedModules": true,
+    "preserveValueImports": true,
     "paths": {
       "@/*": ["./src/*"]
     }
