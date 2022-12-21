@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store'
 
-function createSelected(c) {
+function createSelected() {
   const initial = {
     rowIndex: null,
     cellIndex: null,

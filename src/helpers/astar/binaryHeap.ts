@@ -2,16 +2,18 @@ export function getHeap() {
   return new BinaryHeap((node) => node.f)
 }
 
-function BinaryHeap(scoreFunction) {
-  this.content = []
-  this.scoreFunction = scoreFunction
-}
+class BinaryHeap {
+  content: any[] = []
+  scoreFunction: (node: any) => void
 
-BinaryHeap.prototype = {
+  constructor(scoreFunction: (node: any) => void) {
+    this.scoreFunction = scoreFunction
+  }
+
   push(element) {
     this.content.push(element)
     this.sinkDown(this.content.length - 1)
-  },
+  }
 
   pop() {
     let result = this.content[0]
@@ -23,7 +25,7 @@ BinaryHeap.prototype = {
     }
 
     return result
-  },
+  }
 
   remove(node) {
     let i = this.content.indexOf(node)
@@ -38,15 +40,15 @@ BinaryHeap.prototype = {
         this.bubbleUp(i)
       }
     }
-  },
+  }
 
   size() {
     return this.content.length
-  },
+  }
 
   rescoreElement(node) {
     this.sinkDown(this.content.indexOf(node))
-  },
+  }
 
   sinkDown(n) {
     let element = this.content[n]
@@ -64,7 +66,7 @@ BinaryHeap.prototype = {
         break
       }
     }
-  },
+  }
 
   bubbleUp(n) {
     let length = this.content.length
@@ -103,5 +105,5 @@ BinaryHeap.prototype = {
         break
       }
     }
-  },
+  }
 }

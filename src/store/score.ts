@@ -1,5 +1,5 @@
 import { writable } from 'svelte/store'
-import { countBallToErase } from '../settings'
+import { COUNT_BALL_TO_ERASE } from '@/settings'
 
 function createScore() {
   const { subscribe, set, update } = writable(0)
@@ -9,7 +9,8 @@ function createScore() {
     add: (value) =>
       update(
         (score) =>
-          score + (countBallToErase + (value - countBallToErase) * 2),
+          score +
+          (COUNT_BALL_TO_ERASE + (value - COUNT_BALL_TO_ERASE) * 2),
       ),
     reset: () => set(0),
   }

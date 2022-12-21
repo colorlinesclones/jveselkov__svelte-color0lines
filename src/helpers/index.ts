@@ -1,6 +1,6 @@
-import { newBallsCount, countBallToErase } from './../settings'
+import { COUNT_BALL_TO_ERASE } from '@/settings'
 
-function getRandomInt(min, max) {
+function getRandomInt(min: number, max: number) {
   let rand = min - 0.5 + Math.random() * (max - min + 1)
   return Math.round(rand)
 }
@@ -23,8 +23,8 @@ function checkLines(table, rowIndex, cellIndex) {
   if (table[rowIndex][cellIndex] == undefined) {
     return []
   }
-  const maxCells = table[0].length
-  const maxRows = table.length
+  const MAX_CELLS = table[0].length
+  const MAX_ROWS = table.length
 
   const lines = []
 
@@ -41,7 +41,7 @@ function checkLines(table, rowIndex, cellIndex) {
     }
   }
 
-  for (let index = cellIndex + 1; index < maxCells; index++) {
+  for (let index = cellIndex + 1; index < MAX_CELLS; index++) {
     if (table[rowIndex][index] === table[rowIndex][cellIndex]) {
       horizontalLine.push({
         rowIndex,
@@ -65,7 +65,7 @@ function checkLines(table, rowIndex, cellIndex) {
     }
   }
 
-  for (let index = rowIndex + 1; index < maxRows; index++) {
+  for (let index = rowIndex + 1; index < MAX_ROWS; index++) {
     if (table[index][cellIndex] === table[rowIndex][cellIndex]) {
       verticalLine.push({
         rowIndex: index,
@@ -76,11 +76,11 @@ function checkLines(table, rowIndex, cellIndex) {
     }
   }
 
-  if (horizontalLine.length >= countBallToErase) {
+  if (horizontalLine.length >= COUNT_BALL_TO_ERASE) {
     lines.push(horizontalLine)
   }
 
-  if (verticalLine.length >= countBallToErase) {
+  if (verticalLine.length >= COUNT_BALL_TO_ERASE) {
     lines.push(verticalLine)
   }
 
@@ -126,12 +126,4 @@ function getPath(
 
 export { checkLines, getPath, getRandomEmptyField, getRandomInt }
 
-export function debounce(func, timeout = 300) {
-  let timer
-  return (...args) => {
-    clearTimeout(timer)
-    timer = window.setTimeout(() => {
-      func(...args)
-    }, timeout)
-  }
-}
+export * from './debounce'

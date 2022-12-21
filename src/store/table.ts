@@ -1,8 +1,7 @@
 import { writable, derived } from 'svelte/store'
-import { maxCells, maxRows } from '../settings'
+import { MAX_CELLS, MAX_ROWS } from '@/settings'
 
 function setTableCell(table, { rowIndex, cellIndex, value }) {
-  console.log(table)
   const row = [...table[rowIndex]]
   row[cellIndex] = value
   table[rowIndex] = row
@@ -10,12 +9,12 @@ function setTableCell(table, { rowIndex, cellIndex, value }) {
   return table
 }
 
-function createTable(maxCells, maxRows) {
-  const emptyTable = (maxRows, maxCells) =>
-    new Array(maxRows).fill(new Array(maxCells).fill(0))
+function createTable(MAX_CELLS, MAX_ROWS) {
+  const emptyTable = (MAX_ROWS, MAX_CELLS) =>
+    new Array(MAX_ROWS).fill(new Array(MAX_CELLS).fill(0))
 
   const { subscribe, set, update } = writable(
-    emptyTable(maxRows, maxCells),
+    emptyTable(MAX_ROWS, MAX_CELLS),
   )
 
   return {
@@ -57,11 +56,11 @@ function createTable(maxCells, maxRows) {
         return table
       })
     },
-    reset: () => set(emptyTable(maxRows, maxCells)),
+    reset: () => set(emptyTable(MAX_ROWS, MAX_CELLS)),
   }
 }
 
-export const table = createTable(maxCells, maxRows)
+export const table = createTable(MAX_CELLS, MAX_ROWS)
 
 export const emptyBallsCount = derived(
   table,

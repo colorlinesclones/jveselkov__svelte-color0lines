@@ -1,35 +1,35 @@
 import { writable } from 'svelte/store'
-import { getRandomInt } from '../helpers'
+import { getRandomInt } from '@/helpers'
 import {
-  countColors,
-  newBallsCount,
-  initialBallsCount,
-} from '../settings'
+  COUNT_COLORS,
+  NEW_BALLS_COUNT,
+  INITIAL_BALLS_COUNT,
+} from '@/settings'
 
-function randomArr(countColors, newBallsCount) {
-  return new Array(newBallsCount)
+function randomArr(COUNT_COLORS, NEW_BALLS_COUNT) {
+  return new Array(NEW_BALLS_COUNT)
     .fill(0)
-    .map(() => getRandomInt(1, countColors))
+    .map(() => getRandomInt(1, COUNT_COLORS))
 }
 
 function createNextBalls(
-  countColors,
-  newBallsCount,
-  initialBallsCount,
+  COUNT_COLORS,
+  NEW_BALLS_COUNT,
+  INITIAL_BALLS_COUNT,
 ) {
   const { subscribe, set } = writable(
-    randomArr(countColors, initialBallsCount),
+    randomArr(COUNT_COLORS, INITIAL_BALLS_COUNT),
   )
 
   return {
     subscribe,
-    random: () => set(randomArr(countColors, newBallsCount)),
-    reset: () => set(randomArr(countColors, initialBallsCount)),
+    random: () => set(randomArr(COUNT_COLORS, NEW_BALLS_COUNT)),
+    reset: () => set(randomArr(COUNT_COLORS, INITIAL_BALLS_COUNT)),
   }
 }
 
 export const next = createNextBalls(
-  countColors,
-  newBallsCount,
-  initialBallsCount,
+  COUNT_COLORS,
+  NEW_BALLS_COUNT,
+  INITIAL_BALLS_COUNT,
 )
