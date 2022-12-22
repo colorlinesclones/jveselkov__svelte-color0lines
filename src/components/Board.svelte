@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="ts" strictEvents>
   import Field from './Field.svelte'
 
   import {
@@ -128,8 +128,8 @@
         <Field
           selected={$selected?.rowIndex === rowIndex &&
             $selected?.cellIndex === cellIndex}
-          on:cell-click={cellClick({ rowIndex, cellIndex })}
-          on:empty-cell-click={emptyCellClick({
+          on:cellClick={cellClick({ rowIndex, cellIndex })}
+          on:emptyCellClick={emptyCellClick({
             rowIndex,
             cellIndex,
           })}

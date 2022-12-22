@@ -1,18 +1,28 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte'
+  import type { ComponentProps } from 'svelte'
+
   import Ball from './Ball.svelte'
 
+  interface $$Props extends ComponentProps<Ball> {}
+
   export let color = 0
+  export let selected = false
+
+  interface $$Events {
+    emptyCellClick: CustomEvent<null>
+    cellClick: CustomEvent<null>
+  }
 
   const dispatch = createEventDispatcher()
 
   function clickBall() {
-    dispatch(color === 0 ? 'empty-cell-click' : 'cell-click')
+    dispatch(color === 0 ? 'emptyCellClick' : 'cellClick')
   }
 </script>
 
 <div class="field" on:pointerdown={clickBall}>
-  <Ball {...$$props} />
+  <Ball {color} {selected} />
 </div>
 
 <style>

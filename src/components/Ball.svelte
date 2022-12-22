@@ -1,6 +1,11 @@
 <script lang="ts">
   import { fade } from 'svelte/transition'
 
+  interface $$Props {
+    color: number
+    selected?: boolean
+  }
+
   export let color = 0
   export let selected = false
 
