@@ -6,7 +6,7 @@ function getPath(
   fieldTo: TField,
 ): TPath {
   const graph = new Graph(
-    table.map((row) => row.map((cell) => (!!cell ? 0 : 1))),
+    table.map((row) => row.map((cell) => (Boolean(cell) ? 0 : 1))),
   )
 
   const result: TPath = astar

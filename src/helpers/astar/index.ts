@@ -1,135 +1,8 @@
 import { getHeap } from './binaryHeap'
-import { GridNode } from './gridNode'
+import { Graph } from './Graph'
+import type { GridNode } from './GridNode'
 
-type TNode = {
-  f: number
-  g: number
-  h: number
-  visited: boolean
-  closed: boolean
-  parent: TNode | null
-}
-
-class Graph {
-  nodes
-  diagonal
-  grid
-  dirtyNodes
-
-  constructor(gridIn, options?) {
-    options = options || {}
-
-    this.nodes = []
-    this.diagonal = !!options.diagonal
-    this.grid = []
-
-    for (let x = 0; x < gridIn.length; x++) {
-      this.grid[x] = []
-
-      for (let y = 0, row = gridIn[x]; y < row.length; y++) {
-        const node = new GridNode(x, y, row[y])
-
-        this.grid[x][y] = node
-        this.nodes.push(node)
-      }
-    }
-
-    this.init()
-  }
-
-  init() {
-    this.dirtyNodes = []
-
-    for (let i = 0; i < this.nodes.length; i++) {
-      astar.cleanNode(this.nodes[i])
-    }
-  }
-
-  cleanDirty() {
-    for (let i = 0; i < this.dirtyNodes.length; i++) {
-      astar.cleanNode(this.dirtyNodes[i])
-    }
-
-    this.dirtyNodes = []
-  }
-
-  markDirty(node) {
-    this.dirtyNodes.push(node)
-  }
-
-  neighbors(node) {
-    const ret = []
-    const x = node.x
-    const y = node.y
-    const grid = this.grid
-
-    // West
-    if (grid[x - 1] && grid[x - 1][y]) {
-      ret.push(grid[x - 1][y])
-    }
-
-    // East
-    if (grid[x + 1] && grid[x + 1][y]) {
-      ret.push(grid[x + 1][y])
-    }
-
-    // South
-    if (grid[x] && grid[x][y - 1]) {
-      ret.push(grid[x][y - 1])
-    }
-
-    // North
-    if (grid[x] && grid[x][y + 1]) {
-      ret.push(grid[x][y + 1])
-    }
-
-    if (!this.diagonal) {
-      return ret
-    }
-
-    // Southwest
-    if (grid[x - 1] && grid[x - 1][y - 1]) {
-      ret.push(grid[x - 1][y - 1])
-    }
-
-    // Southeast
-    if (grid[x + 1] && grid[x + 1][y - 1]) {
-      ret.push(grid[x + 1][y - 1])
-    }
-
-    // Northwest
-    if (grid[x - 1] && grid[x - 1][y + 1]) {
-      ret.push(grid[x - 1][y + 1])
-    }
-
-    // Northeast
-    if (grid[x + 1] && grid[x + 1][y + 1]) {
-      ret.push(grid[x + 1][y + 1])
-    }
-
-    return ret
-  }
-
-  toString() {
-    const graphString = []
-    const nodes = this.grid
-
-    for (let x = 0; x < nodes.length; x++) {
-      const rowDebug = []
-      const row = nodes[x]
-
-      for (let y = 0; y < row.length; y++) {
-        rowDebug.push(row[y].weight)
-      }
-
-      graphString.push(rowDebug.join(' '))
-    }
-
-    return graphString.join('\n')
-  }
-}
-
-function pathTo(node) {
+function pathTo(node: GridNode) {
   let curr = node
   const path = []
 
@@ -142,7 +15,12 @@ function pathTo(node) {
 }
 
 const astar = {
-  search(graph: Graph, start, end, options?) {
+  search(
+    graph: Graph,
+    start: GridNode,
+    end: GridNode,
+    options?: any,
+  ) {
     graph.cleanDirty()
     options = options || {}
 
@@ -213,30 +91,21 @@ const astar = {
   },
 
   heuristics: {
-    manhattan(pos0, pos1) {
-      let d1 = Math.abs(pos1.x - pos0.x)
-      let d2 = Math.abs(pos1.y - pos0.y)
+    manhattan(pos0: GridNode, pos1: GridNode) {
+      const d1 = Math.abs(pos1.x - pos0.x)
+      const d2 = Math.abs(pos1.y - pos0.y)
 
       return d1 + d2
     },
 
-    diagonal(pos0, pos1) {
-      let D = 1
-      let D2 = Math.sqrt(2)
-      let d1 = Math.abs(pos1.x - pos0.x)
-      let d2 = Math.abs(pos1.y - pos0.y)
+    diagonal(pos0: GridNode, pos1: GridNode) {
+      const D = 1
+      const D2 = Math.sqrt(2)
+      const d1 = Math.abs(pos1.x - pos0.x)
+      const d2 = Math.abs(pos1.y - pos0.y)
 
       return D * (d1 + d2) + (D2 - 2 * D) * Math.min(d1, d2)
     },
-  },
-
-  cleanNode(node) {
-    node.f = 0
-    node.g = 0
-    node.h = 0
-    node.visited = false
-    node.closed = false
-    node.parent = null
   },
 }
 

@@ -17,6 +17,7 @@
   } from '@/helpers'
 
   let loose = false
+  let blocked = false
 
   $: loose = $emptyBallsCount - $next.length <= 0
 
@@ -24,27 +25,33 @@
     return () => selected.set(field)
   }
 
-  function emptyCellClick(rowIndex: number, cellIndex: number) {
-    return async function () {
+  function emptyCellClick(field: TField) {
+    return () => {
       if (loose || $selected === null) {
         return
       }
 
-      const path = getPath($table, $selected, {
-        rowIndex,
-        cellIndex,
-      })
+      const path = getPath($table, $selected, field)
 
       selected.reset()
 
+      if (path.length === 0) {
+        return
+      }
+
+      blocked = true
+
       moveBall(path)
-        .then(() => check(rowIndex, cellIndex))
+        .then(() => check(field))
         .catch(() => addNext())
+        .finally(() => {
+          blocked = false
+        })
     }
   }
 
   async function moveBall(path: TPath) {
-    return new Promise((resolve) => {
+    return new Promise<null>((resolve) => {
       for (let index = 1; index < path.length; index++) {
         setTimeout(() => {
           table.moveBall(path[index - 1], path[index])
@@ -57,10 +64,10 @@
     })
   }
 
-  async function check(rowIndex: number, cellIndex: number) {
-    return new Promise((resolve, reject) => {
+  async function check(field: TField) {
+    return new Promise<null>((resolve, reject) => {
       setTimeout(() => {
-        const line = checkLines($table, { rowIndex, cellIndex })
+        const line = checkLines($table, field)
 
         if (line.length !== 0) {
           score.add(line.length)
@@ -80,9 +87,7 @@
 
       table.setBall(newField, element)
 
-      await check(newField.rowIndex, newField.cellIndex).catch(
-        () => {},
-      )
+      await check(newField).catch(() => {})
     })
 
     next.random()
@@ -102,7 +107,7 @@
   init()
 </script>
 
-<div class="board">
+<div class="board" class:blocked>
   <div class="top">
     <p>Score: {$score}</p>
     {#if loose}
@@ -124,7 +129,10 @@
           selected={$selected?.rowIndex === rowIndex &&
             $selected?.cellIndex === cellIndex}
           on:cell-click={cellClick({ rowIndex, cellIndex })}
-          on:empty-cell-click={emptyCellClick(rowIndex, cellIndex)}
+          on:empty-cell-click={emptyCellClick({
+            rowIndex,
+            cellIndex,
+          })}
           color={cell}
         />
       {/each}
@@ -139,6 +147,9 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+  }
+  .board.blocked {
+    pointer-events: none;
   }
   .top {
     flex-direction: row;
