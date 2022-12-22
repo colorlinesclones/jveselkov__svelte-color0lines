@@ -1,4 +1,4 @@
-import { getHeap } from './binaryHeap'
+import { getHeap } from './BinaryHeap'
 import { Graph } from './Graph'
 import type { GridNode } from './GridNode'
 
@@ -36,7 +36,7 @@ const astar = {
     openHeap.push(start)
 
     while (openHeap.size() > 0) {
-      let currentNode = openHeap.pop()
+      const currentNode = openHeap.pop()
 
       if (currentNode === end) {
         return pathTo(currentNode)
@@ -44,17 +44,17 @@ const astar = {
 
       currentNode.closed = true
 
-      let neighbors = graph.neighbors(currentNode)
+      const neighbors = graph.neighbors(currentNode)
 
       for (let i = 0, il = neighbors.length; i < il; ++i) {
-        let neighbor = neighbors[i]
+        const neighbor = neighbors[i]
 
         if (neighbor.closed || neighbor.isWall()) {
           continue
         }
 
-        let gScore = currentNode.g + neighbor.getCost(currentNode)
-        let beenVisited = neighbor.visited
+        const gScore = currentNode.g + neighbor.getCost(currentNode)
+        const beenVisited = neighbor.visited
 
         if (!beenVisited || gScore < neighbor.g) {
           neighbor.visited = true
