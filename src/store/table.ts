@@ -1,5 +1,5 @@
 import { writable, derived } from 'svelte/store'
-import type { Writable, Readable } from 'svelte/store'
+import type { Writable } from 'svelte/store'
 import { MAX_CELLS, MAX_ROWS } from '@/settings'
 import { setTableCell, getEmptyTable } from '@/helpers'
 

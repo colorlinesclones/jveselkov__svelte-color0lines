@@ -117,6 +117,6 @@ export function setTableCell(
   return table
 }
 
-export function getEmptyTable(cells, rows) {
+export function getEmptyTable(cells: number, rows: number): TTable {
   return new Array(rows).fill(new Array(cells).fill(0))
 }

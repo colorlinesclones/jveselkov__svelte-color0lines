@@ -1,15 +1,17 @@
 import { writable } from 'svelte/store'
 import type { Writable } from 'svelte/store'
 
+type TSelectedValue = TField | null
+
 type TSelectedStore = {
-  subscribe: Writable<null | TField>['subscribe']
+  subscribe: Writable<TSelectedValue>['subscribe']
   set: (value: TField) => void
   reset: () => void
 }
 
 function createSelected(): TSelectedStore {
-  const initial: TField | null = null
-  const { subscribe, set, update } = writable(initial)
+  const initial = null
+  const { subscribe, set, update } = writable<TSelectedValue>(initial)
 
   return {
     subscribe,
