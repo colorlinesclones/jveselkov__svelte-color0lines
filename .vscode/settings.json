@@ -10,10 +10,10 @@
     "editor.formatOnSave": true
   },
   "[html]": {
-    "editor.formatOnSave": false
+    "editor.formatOnSave": true
   },
   "[json]": {
-    "editor.formatOnSave": false
+    "editor.formatOnSave": true
   },
   "eslint.alwaysShowStatus": true,
   "editor.codeActionsOnSave": {
