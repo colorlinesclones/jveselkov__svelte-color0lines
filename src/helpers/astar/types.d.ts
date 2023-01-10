@@ -1,3 +1,0 @@
-type TGraphOptions = {
-  diagonal: boolean
-}

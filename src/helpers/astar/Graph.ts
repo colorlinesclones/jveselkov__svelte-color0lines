@@ -1,5 +1,9 @@
 import { GridNode } from './GridNode'
 
+type TGraphOptions = {
+  diagonal: boolean
+}
+
 export class Graph {
   nodes: GridNode[]
   diagonal: boolean
