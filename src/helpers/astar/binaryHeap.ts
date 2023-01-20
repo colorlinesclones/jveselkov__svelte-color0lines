@@ -4,11 +4,13 @@ export function getHeap() {
   return new BinaryHeap((node) => node.f)
 }
 
+type TScoreFunction = (node: GridNode) => number
+
 class BinaryHeap {
   content: GridNode[] = []
-  scoreFunction: (node: any) => void
+  scoreFunction: TScoreFunction
 
-  constructor(scoreFunction: (node: any) => void) {
+  constructor(scoreFunction: TScoreFunction) {
     this.scoreFunction = scoreFunction
   }
 
@@ -79,7 +81,7 @@ class BinaryHeap {
       const child2N = (n + 1) << 1
       const child1N = child2N - 1
       let swap = null
-      let child1Score
+      let child1Score: number = 0
 
       if (child1N < length) {
         const child1 = this.content[child1N]
