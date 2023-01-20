@@ -14,12 +14,17 @@ function pathTo(node: GridNode) {
   return path
 }
 
+type TSearchOptions = {
+  heuristic?: (pos0: GridNode, pos1: GridNode) => number
+  closest?: boolean
+}
+
 const astar = {
   search(
     graph: Graph,
     start: GridNode,
     end: GridNode,
-    options?: any,
+    options?: TSearchOptions,
   ) {
     graph.cleanDirty()
     options = options || {}

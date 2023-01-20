@@ -17,8 +17,8 @@ function getPath(
     )
     .map((item) => {
       return {
-        rowIndex: Number(item.x),
-        cellIndex: Number(item.y),
+        rowIndex: item.x,
+        cellIndex: item.y,
       }
     })
 
