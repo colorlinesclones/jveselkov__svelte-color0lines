@@ -1,5 +1,4 @@
 {
-  "cSpell.words": ["astar", "cli", "optimised", "sirv", "sirv cli"],
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnPaste": false,
   "editor.formatOnSave": true,

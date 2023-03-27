@@ -105,18 +105,6 @@ export function getRandomColors(
     .map(() => getRandomInt(1, countColors))
 }
 
-export function setTableCell(
-  table: TTable,
-  { rowIndex, cellIndex }: TField,
-  value: number,
-) {
-  const row = [...table[rowIndex]]
-  row[cellIndex] = value
-  table[rowIndex] = row
-
-  return table
-}
-
 export function getEmptyTable(cells: number, rows: number): TTable {
-  return new Array(rows).fill(new Array(cells).fill(0))
+  return new Array(rows).fill(0).map(() => new Array(cells).fill(0))
 }
